@@ -11,6 +11,84 @@
 // A lesson with type: "questions" uses he (question), enQ (question in English), answerHe, en (answer), hint.
 window.LESSONS = [
   {
+    id: "who-says-to-whom",
+    type: "questions",
+    title: "Who says to whom? 18:3-6",
+    titleHe: "מִי אוֹמֵר אֶל מִי?",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-who-says-to-whom.jpg",
+    words: [
+      { he: "אַל נָא תַעֲבֹר מֵעַל עַבְדֶּךָ", enQ: "\"Please don't pass by your servant.\"",
+        answerHe: "אַבְרָהָם אֶל ה׳", en: "Avraham to Hashem", hint: "Look in pasuk ג׳ (3).", source: "Bereishis 18:3" },
+      { he: "וְאֶקְחָה פַת לֶחֶם וְסַעֲדוּ לִבְּכֶם", enQ: "\"Let me get some bread so you can eat.\"",
+        answerHe: "אַבְרָהָם אֶל הַמַּלְאָכִים", en: "Avraham to the angels", hint: "Look in pasuk ה׳ (5).", source: "Bereishis 18:5" },
+      { he: "כֵּן תַּעֲשֶׂה כַּאֲשֶׁר דִּבַּרְתָּ", enQ: "\"Do as you said.\"",
+        answerHe: "הַמַּלְאָכִים אֶל אַבְרָהָם", en: "The angels to Avraham", hint: "Look in pasuk ה׳ (5).", source: "Bereishis 18:5" },
+      { he: "מַהֲרִי שְׁלֹשׁ סְאִים קֶמַח סֹלֶת לוּשִׁי וַעֲשִׂי עֻגוֹת", enQ: "\"Hurry, three measures of fine flour, knead it and make cakes.\"",
+        answerHe: "אַבְרָהָם אֶל שָׂרָה", en: "Avraham to Sarah", hint: "Look in pasuk ו׳ (6).", source: "Bereishis 18:6" }
+    ]
+  },
+  {
+    id: "about-whom",
+    type: "questions",
+    title: "About whom was it said? 18:6-8",
+    titleHe: "עַל מִי נֶאֱמַר",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-about-whom.jpg",
+    words: [
+      { he: "וַיְמַהֵר", enQ: "\"And he hurried\"",
+        answerHe: "אַבְרָהָם", en: "Avraham", hint: "Avraham hurried to the tent (pasuk 6). In pasuk 7 the na'ar hurries too.", source: "Bereishis 18:6" },
+      { he: "וְהוּא עֹמֵד עֲלֵיהֶם תַּחַת הָעֵץ", enQ: "\"And he stood over them under the tree\"",
+        answerHe: "אַבְרָהָם", en: "Avraham", hint: "Look in pasuk ח׳ (8).", source: "Bereishis 18:8" },
+      { he: "וַיֹּאכֵלוּ", enQ: "\"And they ate\"",
+        answerHe: "הַמַּלְאָכִים", en: "The angels (the guests)", hint: "Look at the end of pasuk ח׳ (8).", source: "Bereishis 18:8" },
+      { he: "הַנַּעַר", enQ: "\"The young man\"",
+        answerHe: "יִשְׁמָעֵאל", en: "Yishmael", hint: "Rashi on pasuk ז׳ (7) says who the na'ar is.", source: "Bereishis 18:7, Rashi" },
+      { he: "לוּשִׁי וַעֲשִׂי עֻגוֹת", enQ: "\"Knead and make cakes\"",
+        answerHe: "שָׂרָה", en: "Sarah", hint: "Avraham says this in pasuk ו׳ (6).", source: "Bereishis 18:6" }
+    ]
+  },
+  {
+    id: "vayeira-roots-3",
+    title: "Vayeira roots, page 3",
+    titleHe: "מָה הַשֹּׁרֶשׁ וְהַתַּרְגּוּם?",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-vayeira-root-and-translation-3.jpg",
+    words: [
+      { he: "מַהֲרִי", say: "ma-ha-REE", en: "hurry! (said to a girl or woman)", root: "מהר",
+        hint: "י at the end = telling a girl or woman to do it. Avraham says it to Sarah.", source: "Bereishis 18:6" },
+      { he: "לוּשִׁי", say: "LOO-shee", en: "knead! (said to a girl or woman)", root: "לוש",
+        hint: "Again the י at the end = telling a girl or woman.", source: "Bereishis 18:6" },
+      { he: "לַעֲשׂוֹת", say: "la-a-SOT", en: "to do, to make", root: "עשה",
+        hint: "ל at the start = \"to\". The ה of עשה hides.", source: "Bereishis 18:7" },
+      { he: "וַיִּתֵּן", say: "va-yi-TAYN", en: "and he gave", root: "נתן",
+        hint: "The first נ of נתן hides.", source: "Bereishis 18:7" },
+      { he: "רָץ", say: "RATZ", en: "(he) ran", root: "רוץ",
+        hint: "The ו of רוץ hides in the past.", source: "Bereishis 18:7" },
+      { he: "עָמַד", say: "a-MAD", en: "he stood", root: "עמד",
+        hint: "No hidden letters: the word is just the root." },
+      { he: "וַיֹּאכְלוּ", say: "va-yoch-LOO", en: "and they ate", root: "אכל",
+        hint: "וַיּ = \"and\", וּ at the end = \"they\".", source: "Bereishis 18:8" }
+    ]
+  },
+  {
+    id: "vayeira-words",
+    title: "Translate into English: words",
+    titleHe: "מִלִּים",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-translate-words.jpg",
+    words: [
+      { he: "מְעַט", say: "m'-AT", en: "a little", hint: "Avraham offers \"a little water\" (pasuk 4).", source: "Bereishis 18:4" },
+      { he: "נַעַר", say: "NA-ar", en: "young man, lad", hint: "The na'ar prepares the calf (pasuk 7).", source: "Bereishis 18:7" },
+      { he: "רַגְלַיִם", say: "rag-LA-yim", en: "feet", hint: "ַיִם at the end = a pair (two feet).", source: "Bereishis 18:4" },
+      { he: "אִשָּׁה", say: "ee-SHA", en: "woman, wife", hint: "אִשְׁתְּךָ = your wife (pasuk 9).", source: "Bereishis 18:9" },
+      { he: "עֵץ", say: "AYTZ", en: "tree", hint: "Avraham's guests rest under the tree.", source: "Bereishis 18:4" },
+      { he: "לֶחֶם", say: "LE-chem", en: "bread", hint: "פַּת לֶחֶם = a piece of bread.", source: "Bereishis 18:5" },
+      { he: "חֵן", say: "CHAYN", en: "favor, grace", hint: "מָצָאתִי חֵן = I found favor.", source: "Bereishis 18:3" },
+      { he: "אָדוֹן", say: "a-DON", en: "master", hint: "Sarah calls Avraham אֲדֹנִי, \"my master\".", source: "Bereishis 18:12" }
+    ]
+  },
+  {
     id: "perek-18-questions",
     type: "questions",
     title: "Chumash questions, 18:9-15",

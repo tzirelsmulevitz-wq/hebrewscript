@@ -187,7 +187,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
   // Gematria: each letter's number value
   const VAL = { "א":1,"ב":2,"ג":3,"ד":4,"ה":5,"ו":6,"ז":7,"ח":8,"ט":9,"י":10,"כ":20,"ך":20,"ל":30,"מ":40,"ם":40,"נ":50,"ן":50,"ס":60,"ע":70,"פ":80,"ף":80,"צ":90,"ץ":90,"ק":100,"ר":200,"ש":300,"ת":400 };
   LESSONS.forEach(l => l.words.forEach(w => {
-    w.type = l.type || "words";
+    w.type = l.type || "words"; w.lessonId = l.id;
     if (w.type === "gematria") {
       const ls = [...w.he].filter(c => VAL[c]);
       w.en = w.en || String(ls.reduce((t, c) => t + VAL[c], 0));
@@ -327,7 +327,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     const allHe = t => [...new Set(all.filter(w => w.type === t).map(w => w.he))];
     const nearNums = v => [v + 1, v - 1, v + 10, v - 10, v * 10, v + 5].filter(x => x > 0).map(String);
     const qs = shuffle(ws).flatMap((w, i) => {
-      const kinds = w.type === "gematria" ? ["meaning", "read"] : w.type === "questions" ? ["meaning"] : ["root", "meaning", "read"];
+      const kinds = w.type === "questions" ? ["meaning"] : (w.type === "gematria" || !w.root) ? ["meaning", "read"] : ["root", "meaning", "read"];
       if (kinds.length === 1) return [{ w, kind: kinds[0] }];
       return [{ w, kind: kinds[i % kinds.length] }, { w, kind: kinds[(i + 1) % kinds.length] }];
     });
@@ -344,7 +344,9 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
       const g = w.type === "gematria";
       if (w.type === "questions") {
         askTxt = "What's the answer?"; wordHtml = `<div class="word he cursive long" lang="he">${esc(w.he)}</div><div class="qen">${esc(w.enQ || "")}</div>`;
-        correct = w.en; opts = pickOpts(correct, allEn("questions")); optClass = "";
+        const same = [...new Set(all.filter(x => x.lessonId === w.lessonId && x.en !== w.en).map(x => x.en))];
+        const pool = same.length >= 3 ? same : same.concat(shuffle(allEn("questions").filter(x => !same.includes(x))).slice(0, 3 - same.length));
+        correct = w.en; opts = pickOpts(correct, pool); optClass = "";
       } else if (g && kind === "meaning") {
         askTxt = "How much is it worth?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
         correct = w.en; opts = pickOpts(correct, shuffle(allEn("gematria")).slice(0, 2).concat(shuffle(nearNums(+w.en)).slice(0, 3))); optClass = "";
