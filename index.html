@@ -163,7 +163,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     <button data-mode="cards">Cards<small>flip &amp; learn</small></button>
     <button data-mode="match">Match<small>pair them up</small></button>
     <button data-mode="quiz">Quiz<small>root &amp; meaning</small></button>
-    <button data-mode="letters">Letters<small>cursive chart</small></button>
+    <button data-mode="letters">Letters<small>script chart</small></button>
   </nav>
 
   <section class="panel" id="panel" aria-live="polite"></section>
@@ -227,7 +227,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     panel.innerHTML = `
       <div class="row">
         <div class="seg" role="group" aria-label="Front of card">
-          ${[["cursive", "Cursive"], ["print", "Print"], ["en", "English"]].map(([k, t]) => `<button data-front="${k}" aria-pressed="${front === k}">${t}</button>`).join("")}
+          ${[["cursive", "Script"], ["print", "Print"], ["en", "English"]].map(([k, t]) => `<button data-front="${k}" aria-pressed="${front === k}">${t}</button>`).join("")}
         </div>
         <span class="count">${at + 1} / ${deck.length}</span>
       </div>
@@ -364,10 +364,10 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
   function letters() {
     const ws = words();
     panel.innerHTML = `
-      <p class="tip">Big blue letter = cursive (how it is written). Small black letter = print (how it looks in a sefer).</p>
+      <p class="tip">Big blue letter = script (how it is written). Small black letter = print (how it looks in a sefer).</p>
       <div class="letters">${ALEPH_BET.map(([l, n]) => `<div class="lt"><span class="c" lang="he">${l}</span><span class="p" lang="he">${l}</span><span class="n">${n}</span></div>`).join("")}</div>
       ${ws.length ? `<div class="tablewrap"><table class="words">
-        <thead><tr><th>Cursive</th><th>Print</th><th>Root</th><th>Meaning</th></tr></thead>
+        <thead><tr><th>Script</th><th>Print</th><th>Root</th><th>Meaning</th></tr></thead>
         <tbody>${ws.map(w => `<tr><td class="he cursive" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(rootStr(w.root))}</td><td>${esc(w.en)}</td></tr>`).join("")}</tbody>
       </table></div>` : ""}`;
   }
