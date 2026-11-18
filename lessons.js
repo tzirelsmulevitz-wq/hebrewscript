@@ -7,10 +7,44 @@
 //   hint     one short tip a kid can use
 //   source   where it comes from (optional)
 //   check    true = reading from the photo was uncertain; confirm with the teacher
+// A lesson with type: "gematria" needs only he (the letters); the number is worked out.
 window.LESSONS = [
   {
+    id: "vayeira-roots-2",
+    title: "Vayeira roots, page 2",
+    titleHe: "מָה הַשֹּׁרֶשׁ וְהַתַּרְגּוּם?",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-vayeira-root-and-translation-2.jpg",
+    words: [
+      { he: "שׁוּב", say: "SHOOV", en: "return, come back", root: "שוב",
+        hint: "The וּ in the middle is a root letter, so it stays.", source: "Bereishis 18:10" },
+      { he: "זְקֵנִים", say: "z'-kay-NEEM", en: "old (people)", root: "זקן",
+        hint: "ים at the end means more than one.", source: "Bereishis 18:11" },
+      { he: "צָחֲקָה", say: "tza-cha-KAH", en: "she laughed", root: "צחק",
+        hint: "ה at the end means \"she\". Sarah laughed.", source: "Bereishis 18:13" },
+      { he: "יִרְאֶה", say: "yir-EH", en: "he will see", root: "ראה",
+        hint: "י at the start means \"he will\". Compare אֶרְאֶה = I will see.", source: "Bereishis 22:8" },
+      { he: "שׁוֹמַעַת", say: "sho-MA-at", en: "she was listening", root: "שמע",
+        hint: "ת at the end means a girl or woman is doing it.", source: "Bereishis 18:10" }
+    ]
+  },
+  {
+    id: "gematria-11",
+    type: "gematria",
+    title: "Gematria, page 11",
+    titleHe: "מָה הַגִּימַטְרִיָּה שֶׁל:",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-gematria-page-11.jpg",
+    // For gematria, "en" (the number) and "hint" (letter values) are filled in automatically.
+    words: [
+      { he: "ק" }, { he: "ג", check: true }, { he: "טו" }, { he: "כה" }, { he: "לז", check: true },
+      { he: "יב" }, { he: "נ" }, { he: "עב" }, { he: "פח" }, { he: "סא" },
+      { he: "טז" }, { he: "כ" }, { he: "יד" }, { he: "ת" }
+    ]
+  },
+  {
     id: "vayeira-roots",
-    title: "Vayeira: root & translation",
+    title: "Vayeira roots, page 1",
     titleHe: "מָה הַשֹּׁרֶשׁ וְהַתַּרְגּוּם?",
     date: "2026-11-18",
     photo: "homework/2026-11-18-vayeira-root-and-translation.jpg",

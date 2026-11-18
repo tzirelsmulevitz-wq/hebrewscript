@@ -176,6 +176,16 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
 (function () {
   const LESSONS = window.LESSONS || [];
   const EXTRA = window.EXTRA_ROOTS || [];
+  // Gematria: each letter's number value
+  const VAL = { "א":1,"ב":2,"ג":3,"ד":4,"ה":5,"ו":6,"ז":7,"ח":8,"ט":9,"י":10,"כ":20,"ך":20,"ל":30,"מ":40,"ם":40,"נ":50,"ן":50,"ס":60,"ע":70,"פ":80,"ף":80,"צ":90,"ץ":90,"ק":100,"ר":200,"ש":300,"ת":400 };
+  LESSONS.forEach(l => l.words.forEach(w => {
+    w.type = l.type || "words";
+    if (w.type === "gematria") {
+      const ls = [...w.he].filter(c => VAL[c]);
+      w.en = w.en || String(ls.reduce((t, c) => t + VAL[c], 0));
+      w.hint = w.hint || ls.map(c => c + " = " + VAL[c]).join(", ") + (ls.length > 1 ? ", so together " + w.en : "");
+    }
+  }));
   const $ = (s, el = document) => el.querySelector(s);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -227,7 +237,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     panel.innerHTML = `
       <div class="row">
         <div class="seg" role="group" aria-label="Front of card">
-          ${[["cursive", "Script"], ["print", "Print"], ["en", "English"]].map(([k, t]) => `<button data-front="${k}" aria-pressed="${front === k}">${t}</button>`).join("")}
+          ${[["cursive", "Script"], ["print", "Print"], ["en", w.type === "gematria" ? "Number" : "English"]].map(([k, t]) => `<button data-front="${k}" aria-pressed="${front === k}">${t}</button>`).join("")}
         </div>
         <span class="count">${at + 1} / ${deck.length}</span>
       </div>
@@ -237,8 +247,8 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
           <div class="face back">
             <div class="pair"><span class="he cursive" lang="he">${esc(w.he)}</span><span class="he print" lang="he">${esc(w.he)}</span></div>
             <div class="en">${esc(w.en)}</div>
-            <div class="say">say: ${esc(w.say)}</div>
-            <div class="rootchip"><span class="lbl">Root</span><span class="he" lang="he">${esc(rootStr(w.root))}</span></div>
+            ${w.say ? `<div class="say">say: ${esc(w.say)}</div>` : ""}
+            ${w.root ? `<div class="rootchip"><span class="lbl">Root</span><span class="he" lang="he">${esc(rootStr(w.root))}</span></div>` : ""}
             <div class="hint">${heWrap(w.hint)}</div>
             ${w.source ? `<div class="src">${esc(w.source)}</div>` : ""}
           </div>
@@ -269,7 +279,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     const enCol = shuffle(ws.map((w, i) => ({ i, w })));
     let pick = null, left = ws.length, misses = 0;
     panel.innerHTML = `
-      <div class="row"><strong>Match each Hebrew word to its meaning.</strong><span class="count" id="mleft">${left} left</span></div>
+      <div class="row"><strong>Tap a Hebrew tile, then its match.</strong><span class="count" id="mleft">${left} left</span></div>
       <div class="match">
         <div class="col">${heCol.map(x => `<button class="tile he-tile he cursive" lang="he" data-side="he" data-i="${x.i}">${esc(x.w.he)}</button>`).join("")}</div>
         <div class="col">${enCol.map(x => `<button class="tile en-tile" data-side="en" data-i="${x.i}">${esc(x.w.en)}</button>`).join("")}</div>
@@ -286,7 +296,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
         [a, b].forEach(x => { x.classList.add("done"); x.disabled = true; });
         left--; $("#mleft").textContent = left + " left";
         const w = ws[+a.dataset.i];
-        $("#mnote").className = "note ok"; $("#mnote").innerHTML = `Yes! Root ${heWrap(rootStr(w.root))}`;
+        $("#mnote").className = "note ok"; $("#mnote").innerHTML = w.root ? `Yes! Root ${heWrap(rootStr(w.root))}` : `Yes! ${heWrap(w.hint)}`;
         if (!left) setTimeout(() => finish(Math.max(1, 3 - Math.floor(misses / 2)), misses ? `${misses} miss${misses > 1 ? "es" : ""}` : "No misses!", match), 600);
       } else {
         misses++;
@@ -301,10 +311,14 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     const ws = words();
     if (!ws.length) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
     const allRoots = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.root)).concat(EXTRA))];
-    const allEn = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.en)))];
-    const allHe = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.he)))];
-    const kinds = ["root", "meaning", "read"];
-    const qs = shuffle(ws).flatMap((w, i) => [{ w, kind: kinds[i % 3] }, { w, kind: kinds[(i + 1) % 3] }]);
+    const all = LESSONS.flatMap(l => l.words);
+    const allEn = t => [...new Set(all.filter(w => w.type === t).map(w => w.en))];
+    const allHe = t => [...new Set(all.filter(w => w.type === t).map(w => w.he))];
+    const nearNums = v => [v + 1, v - 1, v + 10, v - 10, v * 10, v + 5].filter(x => x > 0).map(String);
+    const qs = shuffle(ws).flatMap((w, i) => {
+      const kinds = w.type === "gematria" ? ["meaning", "read"] : ["root", "meaning", "read"];
+      return [{ w, kind: kinds[i % kinds.length] }, { w, kind: kinds[(i + 1) % kinds.length] }];
+    });
     const list = shuffle(qs).slice(0, Math.min(10, qs.length));
     let n = 0, right = 0;
     const pickOpts = (correct, pool) => shuffle([correct, ...shuffle(pool.filter(x => x !== correct)).slice(0, 3)]);
@@ -315,15 +329,22 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
       }
       const { w, kind } = list[n];
       let askTxt, wordHtml, opts, correct, optClass;
-      if (kind === "root") {
+      const g = w.type === "gematria";
+      if (g && kind === "meaning") {
+        askTxt = "How much is it worth?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
+        correct = w.en; opts = pickOpts(correct, shuffle(allEn("gematria")).slice(0, 2).concat(shuffle(nearNums(+w.en)).slice(0, 3))); optClass = "";
+      } else if (g) {
+        askTxt = "Which letters make this number?"; wordHtml = `<div class="word en">${esc(w.en)}</div>`;
+        correct = w.he; opts = pickOpts(correct, allHe("gematria").concat(["יה", "יו", "כב", "לח", "מ", "ר"])); optClass = "he cursive";
+      } else if (kind === "root") {
         askTxt = "What is the root?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
         correct = w.root; opts = pickOpts(correct, allRoots); optClass = "he";
       } else if (kind === "meaning") {
         askTxt = "What does it mean?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
-        correct = w.en; opts = pickOpts(correct, allEn.concat(["he said", "they came", "I will sit", "he heard"])); optClass = "";
+        correct = w.en; opts = pickOpts(correct, allEn("words").concat(["he said", "they came", "I will sit", "he heard"])); optClass = "";
       } else {
         askTxt = "Which word says this?"; wordHtml = `<div class="word en">${esc(w.en)}</div>`;
-        correct = w.he; opts = pickOpts(correct, allHe.concat(["וַיֹּאמֶר", "אֵשֵׁב", "וַיָּבֹאוּ", "שָׁמַע"])); optClass = "he cursive";
+        correct = w.he; opts = pickOpts(correct, allHe("words").concat(["וַיֹּאמֶר", "אֵשֵׁב", "וַיָּבֹאוּ", "שָׁמַע"])); optClass = "he cursive";
       }
       const label = o => kind === "root" ? rootStr(o) : o;
       panel.innerHTML = `
@@ -364,11 +385,11 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
   function letters() {
     const ws = words();
     panel.innerHTML = `
-      <p class="tip">Big blue letter = script (how it is written). Small black letter = print (how it looks in a sefer).</p>
-      <div class="letters">${ALEPH_BET.map(([l, n]) => `<div class="lt"><span class="c" lang="he">${l}</span><span class="p" lang="he">${l}</span><span class="n">${n}</span></div>`).join("")}</div>
+      <p class="tip">Big blue letter = script (how it is written). Small black letter = print (how it looks in a sefer). The number is the letter's gematria value.</p>
+      <div class="letters">${ALEPH_BET.map(([l, n]) => `<div class="lt"><span class="c" lang="he">${l}</span><span class="p" lang="he">${l}</span><span class="n">${n} · ${VAL[l]}</span></div>`).join("")}</div>
       ${ws.length ? `<div class="tablewrap"><table class="words">
-        <thead><tr><th>Script</th><th>Print</th><th>Root</th><th>Meaning</th></tr></thead>
-        <tbody>${ws.map(w => `<tr><td class="he cursive" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(rootStr(w.root))}</td><td>${esc(w.en)}</td></tr>`).join("")}</tbody>
+        <thead><tr><th>Script</th><th>Print</th><th>Root</th><th>Meaning / value</th></tr></thead>
+        <tbody>${ws.map(w => `<tr><td class="he cursive" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${w.root ? esc(rootStr(w.root)) : ""}</td><td>${esc(w.en)}</td></tr>`).join("")}</tbody>
       </table></div>` : ""}`;
   }
 
