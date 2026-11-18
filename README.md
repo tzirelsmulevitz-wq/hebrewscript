@@ -1,4 +1,4 @@
-# Shoresh Cards
+# Chumash Cards
 
 Hebrew practice for Jack's Chumash homework: flashcards, a matching game, a root and meaning quiz, and a print-to-script letter chart.
 
