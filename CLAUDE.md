@@ -8,4 +8,4 @@ When a new homework photo arrives:
 3. Save the photo to `homework/YYYY-MM-DD-short-name.jpg`.
 4. Add a lesson at the top of `window.LESSONS` in `lessons.js` (see the field list at the top of that file). Mark uncertain readings with `check: true`.
 5. Don't change `index.html` unless asked; the games read `lessons.js` automatically.
-6. Commit, push, and republish the Artifact page if one exists.
+6. Commit and push, then republish the practice page in place: Artifact publish with `url: https://claude.ai/artifact/Rp9Rq7BGFCWYJkDQWY4F1p` (read it first), `file_path: index.html`, and `files: {"lessons.js": "lessons.js"}`.
