@@ -106,6 +106,14 @@ nav button[aria-pressed="true"] small { color: var(--accent-ink); opacity: .85; 
 .q { text-align: center; display: grid; gap: 6px; justify-items: center; }
 .q .ask { font-family: var(--f-display); font-weight: 600; font-size: 1.15rem; color: var(--muted); }
 .q .word { font-size: clamp(3rem, 13vw, 4.6rem); line-height: 1.25; }
+/* Whole sentences (chumash questions) need a smaller size */
+.face .big.long, .q .word.long { font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.6; text-wrap: balance; }
+.back .pair .long { font-size: 1.6rem; line-height: 1.6; }
+.tile.he-tile.long { font-size: 1.2rem; line-height: 1.5; }
+.answer { background: var(--card); border: 2px solid var(--good); border-radius: 14px; padding: 10px 14px; display: grid; gap: 4px; max-width: 46ch; }
+.answer .lbl { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--good); }
+.answer .he { font-family: var(--f-print); font-size: 1.3rem; line-height: 1.6; }
+.qen { color: var(--muted); font-weight: 600; }
 .q .word.en { font-family: var(--f-display); font-weight: 600; font-size: 2.2rem; }
 .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .opt { border: 2px solid var(--line); background: var(--paper); border-radius: 14px; padding: 12px; min-height: 64px; font-weight: 700; font-size: 1.05rem; box-shadow: var(--shadow); }
@@ -223,6 +231,8 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     ({ cards, match, quiz, letters })[mode]();
   }
 
+  const isLong = w => [...w.he].filter(c => /[\u05D0-\u05EA ]/.test(c)).length > 12;
+  const L = w => isLong(w) ? " long" : "";
   // ---------- Flashcards ----------
   let deck = [], at = 0, front = store.get("front", "cursive");
   function cards() {
@@ -232,8 +242,8 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     const w = deck[at];
     if (!w) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
     const frontHtml = front === "en"
-      ? `<div class="big en">${esc(w.en)}</div>`
-      : `<div class="big he ${front}" lang="he">${esc(w.he)}</div>`;
+      ? `<div class="big en${w.enQ ? " long" : ""}">${esc(w.enQ || w.en)}</div>`
+      : `<div class="big he ${front}${L(w)}" lang="he">${esc(w.he)}</div>`;
     panel.innerHTML = `
       <div class="row">
         <div class="seg" role="group" aria-label="Front of card">
@@ -245,8 +255,9 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
         <div class="flash-inner">
           <div class="face front">${frontHtml}<div class="tap">Tap to flip</div></div>
           <div class="face back">
-            <div class="pair"><span class="he cursive" lang="he">${esc(w.he)}</span><span class="he print" lang="he">${esc(w.he)}</span></div>
-            <div class="en">${esc(w.en)}</div>
+            ${isLong(w) ? `<div class="pair"><span class="he print long" lang="he">${esc(w.he)}</span></div>` : `<div class="pair"><span class="he cursive" lang="he">${esc(w.he)}</span><span class="he print" lang="he">${esc(w.he)}</span></div>`}
+            ${w.answerHe ? `<div class="qen">${esc(w.enQ || "")}</div>
+            <div class="answer"><span class="lbl">Answer</span><span class="he" lang="he">${esc(w.answerHe)}</span><span>${esc(w.en)}</span></div>` : `<div class="en">${esc(w.en)}</div>`}
             ${w.say ? `<div class="say">say: ${esc(w.say)}</div>` : ""}
             ${w.root ? `<div class="rootchip"><span class="lbl">Root</span><span class="he" lang="he">${esc(rootStr(w.root))}</span></div>` : ""}
             <div class="hint">${heWrap(w.hint)}</div>
@@ -281,7 +292,7 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
     panel.innerHTML = `
       <div class="row"><strong>Tap a Hebrew tile, then its match.</strong><span class="count" id="mleft">${left} left</span></div>
       <div class="match">
-        <div class="col">${heCol.map(x => `<button class="tile he-tile he cursive" lang="he" data-side="he" data-i="${x.i}">${esc(x.w.he)}</button>`).join("")}</div>
+        <div class="col">${heCol.map(x => `<button class="tile he-tile he cursive${L(x.w)}" lang="he" data-side="he" data-i="${x.i}">${esc(x.w.he)}</button>`).join("")}</div>
         <div class="col">${enCol.map(x => `<button class="tile en-tile" data-side="en" data-i="${x.i}">${esc(x.w.en)}</button>`).join("")}</div>
       </div>
       <div class="note" id="mnote"></div>`;
@@ -310,13 +321,14 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
   function quiz() {
     const ws = words();
     if (!ws.length) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
-    const allRoots = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.root)).concat(EXTRA))];
+    const allRoots = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.root)).filter(Boolean).concat(EXTRA))];
     const all = LESSONS.flatMap(l => l.words);
     const allEn = t => [...new Set(all.filter(w => w.type === t).map(w => w.en))];
     const allHe = t => [...new Set(all.filter(w => w.type === t).map(w => w.he))];
     const nearNums = v => [v + 1, v - 1, v + 10, v - 10, v * 10, v + 5].filter(x => x > 0).map(String);
     const qs = shuffle(ws).flatMap((w, i) => {
-      const kinds = w.type === "gematria" ? ["meaning", "read"] : ["root", "meaning", "read"];
+      const kinds = w.type === "gematria" ? ["meaning", "read"] : w.type === "questions" ? ["meaning"] : ["root", "meaning", "read"];
+      if (kinds.length === 1) return [{ w, kind: kinds[0] }];
       return [{ w, kind: kinds[i % kinds.length] }, { w, kind: kinds[(i + 1) % kinds.length] }];
     });
     const list = shuffle(qs).slice(0, Math.min(10, qs.length));
@@ -330,7 +342,10 @@ footer { color: var(--muted); font-size: .85rem; text-align: center; }
       const { w, kind } = list[n];
       let askTxt, wordHtml, opts, correct, optClass;
       const g = w.type === "gematria";
-      if (g && kind === "meaning") {
+      if (w.type === "questions") {
+        askTxt = "What's the answer?"; wordHtml = `<div class="word he cursive long" lang="he">${esc(w.he)}</div><div class="qen">${esc(w.enQ || "")}</div>`;
+        correct = w.en; opts = pickOpts(correct, allEn("questions")); optClass = "";
+      } else if (g && kind === "meaning") {
         askTxt = "How much is it worth?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
         correct = w.en; opts = pickOpts(correct, shuffle(allEn("gematria")).slice(0, 2).concat(shuffle(nearNums(+w.en)).slice(0, 3))); optClass = "";
       } else if (g) {

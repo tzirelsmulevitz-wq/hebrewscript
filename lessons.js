@@ -8,7 +8,62 @@
 //   source   where it comes from (optional)
 //   check    true = reading from the photo was uncertain; confirm with the teacher
 // A lesson with type: "gematria" needs only he (the letters); the number is worked out.
+// A lesson with type: "questions" uses he (question), enQ (question in English), answerHe, en (answer), hint.
 window.LESSONS = [
+  {
+    id: "perek-18-questions",
+    type: "questions",
+    title: "Chumash questions, 18:9-15",
+    titleHe: "פֶּרֶק יח: פָּסוּק ט׳–ט״ו",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-perek-18-questions.jpg",
+    words: [
+      { he: "מָה שָׁאֲלוּ הַמַּלְאָכִים אֶת אַבְרָהָם?", enQ: "What did the angels ask Avraham?",
+        answerHe: "אַיֵּה שָׂרָה אִשְׁתֶּךָ", en: "Where is Sarah your wife?", hint: "Look in pasuk ט׳ (9).", source: "Bereishis 18:9" },
+      { he: "מִי שׁוֹמַעַת אֶת מָה שֶׁהַמַּלְאָךְ אָמַר?", enQ: "Who was listening to what the angel said?",
+        answerHe: "וְשָׂרָה שֹׁמַעַת פֶּתַח הָאֹהֶל", en: "Sarah, at the door of the tent", hint: "Look in pasuk י׳ (10).", source: "Bereishis 18:10" },
+      { he: "מִי הָיוּ זְקֵנִים?", enQ: "Who were old?",
+        answerHe: "וְאַבְרָהָם וְשָׂרָה זְקֵנִים", en: "Avraham and Sarah", hint: "Look in pasuk י״א (11).", source: "Bereishis 18:11" },
+      { he: "מָתַי יִהְיֶה לְשָׂרָה בֵּן?", enQ: "When will Sarah have a son?",
+        answerHe: "לַמּוֹעֵד אָשׁוּב אֵלֶיךָ כָּעֵת חַיָּה וּלְשָׂרָה בֵן", en: "Next year, at this same time", hint: "Look in pasuk י׳ (10) or י״ד (14).", source: "Bereishis 18:10, 18:14" }
+    ]
+  },
+  {
+    id: "vav-hahipuch",
+    title: "Vav hahipuch (the flip vav)",
+    titleHe: "הַהִפּוּךְ",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-vav-hahipuch.jpg",
+    words: [
+      { he: "וַיִּשָּׂא", say: "va-yi-SA", en: "and he lifted (up)", root: "נשא",
+        hint: "Without the וַ: יִשָּׂא = he will lift. The וַ flips it to the past.", source: "Bereishis 18:2" },
+      { he: "וַיַּרְא", say: "va-YAR", en: "and he saw", root: "ראה",
+        hint: "Without the וַ: יִרְאֶה = he will see.", source: "Bereishis 18:2" },
+      { he: "וַיָּרָץ", say: "va-ya-RATZ", en: "and he ran", root: "רוץ",
+        hint: "Without the וַ: יָרוּץ = he will run.", source: "Bereishis 18:2", check: true },
+      { he: "וַיֹּאמְרוּ", say: "va-yom-ROO", en: "and they said", root: "אמר",
+        hint: "Without the וַ: יֹאמְרוּ = they will say. וּ at the end = they.", source: "Bereishis 18:5" },
+      { he: "וַיְמַהֵר", say: "vay-ma-HAYR", en: "and he hurried", root: "מהר",
+        hint: "Without the וַ: יְמַהֵר = he will hurry.", source: "Bereishis 18:7" },
+      { he: "וַיִּקַּח", say: "va-yi-KACH", en: "and he took", root: "לקח",
+        hint: "Without the וַ: יִקַּח = he will take. The ל of לקח hides.", source: "Bereishis 18:7" },
+      { he: "וַיִּתֵּן", say: "va-yi-TAYN", en: "and he gave", root: "נתן",
+        hint: "Without the וַ: יִתֵּן = he will give. The first נ of נתן hides.", source: "Bereishis 18:7" },
+      { he: "וַיֹּאכְלוּ", say: "va-yoch-LOO", en: "and they ate", root: "אכל",
+        hint: "Without the וַ: יֹאכְלוּ = they will eat.", source: "Bereishis 18:8" },
+      { he: "וַתִּצְחַק", say: "va-titz-CHAK", en: "and she laughed", root: "צחק",
+        hint: "Without the וַ: תִּצְחַק = she will laugh. ת at the start = she.", source: "Bereishis 18:12" }
+    ]
+  },
+  {
+    id: "gematria-1-30",
+    type: "gematria",
+    title: "Gematria 1-30, page 10",
+    titleHe: "",
+    date: "2026-11-18",
+    photo: "homework/2026-11-18-gematria-1-30-page-10.jpg",
+    words: ["א","ב","ג","ד","ה","ו","ז","ח","ט","י","יא","יב","יג","יד","טו","טז","יז","יח","יט","כ","כא","כב","כג","כד","כה","כו","כז","כח","כט","ל"].map(he => ({ he }))
+  },
   {
     id: "vayeira-roots-2",
     title: "Vayeira roots, page 2",
