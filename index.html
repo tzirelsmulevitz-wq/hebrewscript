@@ -1,0 +1,377 @@
+<meta charset="utf-8">
+<title>Jack's Shoresh Cards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gveret+Levin&family=Noto+Serif+Hebrew:wght@500;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap">
+<style>
+/* Layout: one centered column like a desk; a tab strip of practice modes, then the active mode's play area. */
+:root {
+  --paper: #f3f6fb;      /* page */
+  --card: #ffffff;       /* surfaces */
+  --ink: #1d2a4d;        /* text, deep blue ink */
+  --muted: #5d6a8a;
+  --line: #d6deec;
+  --accent: #2f5bd3;     /* blue pen */
+  --accent-ink: #ffffff;
+  --gold: #e8a317;       /* stars */
+  --good: #1f8a5b;
+  --good-bg: #dff3e9;
+  --bad: #c2413a;
+  --bad-bg: #fbe3e1;
+  --shadow: 0 2px 0 #d6deec;
+  --f-cursive: "Gveret Levin", "Noto Serif Hebrew", serif;
+  --f-print: "Noto Serif Hebrew", "Times New Roman", serif;
+  --f-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --f-body: "Nunito", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #121829; --card: #1b2338; --ink: #e8edf9; --muted: #a3afcc; --line: #2d3854;
+  --accent: #7d9dff; --accent-ink: #0d1324; --gold: #f2b84b; --good: #5fd39d; --good-bg: #173a2c;
+  --bad: #ff8a80; --bad-bg: #42201f; --shadow: 0 2px 0 #0b1020; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #121829; --card: #1b2338; --ink: #e8edf9; --muted: #a3afcc; --line: #2d3854;
+  --accent: #7d9dff; --accent-ink: #0d1324; --gold: #f2b84b; --good: #5fd39d; --good-bg: #173a2c;
+  --bad: #ff8a80; --bad-bg: #42201f; --shadow: 0 2px 0 #0b1020; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 20px 48px; display: grid; gap: 20px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.he { direction: rtl; unicode-bidi: isolate; }
+.cursive { font-family: var(--f-cursive); }
+.print { font-family: var(--f-print); }
+
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 1.9rem; margin: 0; line-height: 1.1; text-wrap: balance; }
+h1 .he { font-family: var(--f-cursive); color: var(--accent); font-weight: 400; margin-inline-start: 6px; }
+.stars { font-family: var(--f-display); font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+.stars b { color: var(--gold); font-size: 1.3rem; }
+
+.lesson { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; color: var(--muted); font-size: .95rem; }
+.lesson select { font: inherit; font-weight: 700; color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: 6px 10px; max-width: 100%; }
+.lesson .he { font-family: var(--f-cursive); font-size: 1.15rem; color: var(--ink); }
+
+nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+nav button { background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 10px 6px; font-family: var(--f-display); font-weight: 600; font-size: 1rem; box-shadow: var(--shadow); }
+nav button small { display: block; font-family: var(--f-body); font-weight: 600; font-size: .75rem; color: var(--muted); }
+nav button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+nav button[aria-pressed="true"] small { color: var(--accent-ink); opacity: .85; }
+
+.panel { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 20px; display: grid; gap: 16px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; border: 2px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 6px 12px; font-weight: 700; font-size: .85rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.btn { background: var(--card); border: 2px solid var(--line); border-radius: 12px; padding: 8px 14px; font-weight: 700; box-shadow: var(--shadow); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.count { color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Flashcard */
+.flash { perspective: 1200px; }
+.flash-inner { display: grid; min-height: 290px; transition: transform .45s; transform-style: preserve-3d; }
+.flash.flipped .flash-inner { transform: rotateY(180deg); }
+.face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 18px; border: 2px solid var(--line);
+  background: var(--paper); display: grid; place-items: center; align-content: center; gap: 8px; padding: 20px; text-align: center; width: 100%; }
+.face.back { transform: rotateY(180deg); }
+.face .big { font-size: clamp(3.4rem, 14vw, 5.5rem); line-height: 1.25; }
+.face .big.en { font-family: var(--f-display); font-size: clamp(2rem, 8vw, 2.8rem); font-weight: 600; }
+.face .tap { color: var(--muted); font-size: .85rem; }
+.back .pair { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; align-items: baseline; }
+.back .pair .cursive { font-size: 3rem; }
+.back .pair .print { font-size: 2.6rem; }
+.back .en { font-family: var(--f-display); font-weight: 600; font-size: 1.6rem; }
+.back .say { color: var(--muted); font-weight: 700; }
+.rootchip { display: inline-flex; gap: 8px; align-items: center; background: var(--card); border: 2px dashed var(--accent); border-radius: 12px; padding: 4px 12px; }
+.rootchip .lbl { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.rootchip .he { font-family: var(--f-print); font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+.hint { font-size: .95rem; max-width: 46ch; }
+.hint .he, .note .he { font-family: var(--f-print); }
+.src { font-size: .8rem; color: var(--muted); }
+
+/* Match */
+.match { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.col { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.tile { border: 2px solid var(--line); background: var(--paper); border-radius: 14px; padding: 10px; min-height: 64px; display: grid; place-items: center; box-shadow: var(--shadow); transition: transform .15s, background .2s; }
+.tile.he-tile { font-size: 2.1rem; line-height: 1.2; }
+.tile.en-tile { font-family: var(--f-display); font-weight: 600; font-size: 1.05rem; }
+.tile.sel { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--paper)); transform: translateY(-2px); }
+.tile.done { background: var(--good-bg); border-color: var(--good); color: var(--good); cursor: default; box-shadow: none; }
+.tile.wrong { animation: shake .35s; border-color: var(--bad); background: var(--bad-bg); }
+@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+/* Quiz */
+.q { text-align: center; display: grid; gap: 6px; justify-items: center; }
+.q .ask { font-family: var(--f-display); font-weight: 600; font-size: 1.15rem; color: var(--muted); }
+.q .word { font-size: clamp(3rem, 13vw, 4.6rem); line-height: 1.25; }
+.q .word.en { font-family: var(--f-display); font-weight: 600; font-size: 2.2rem; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt { border: 2px solid var(--line); background: var(--paper); border-radius: 14px; padding: 12px; min-height: 64px; font-weight: 700; font-size: 1.05rem; box-shadow: var(--shadow); }
+.opt.he { font-family: var(--f-print); font-size: 1.6rem; }
+.opt.he.cursive { font-family: var(--f-cursive); font-size: 2rem; }
+.opt.right { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.opt.miss { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+.note { text-align: center; font-weight: 600; min-height: 1.5em; }
+.note.ok { color: var(--good); } .note.no { color: var(--bad); }
+.bar { height: 10px; background: var(--paper); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+.bar i { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+
+.done-box { text-align: center; display: grid; gap: 10px; justify-items: center; padding-block: 16px; }
+.done-box .big-stars { font-size: 2.6rem; color: var(--gold); letter-spacing: .1em; }
+.done-box h2 { font-family: var(--f-display); margin: 0; font-size: 1.6rem; }
+
+/* Letters */
+.letters { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; direction: rtl; }
+.lt { border: 2px solid var(--line); background: var(--paper); border-radius: 14px; padding: 8px 6px; display: grid; justify-items: center; gap: 2px; }
+.lt .c { font-family: var(--f-cursive); font-size: 2.6rem; line-height: 1.15; color: var(--accent); }
+.lt .p { font-family: var(--f-print); font-size: 1.3rem; }
+.lt .n { font-size: .75rem; font-weight: 700; color: var(--muted); direction: ltr; text-align: center; }
+.tip { font-size: .9rem; color: var(--muted); }
+
+.words { width: 100%; border-collapse: collapse; }
+.tablewrap { overflow-x: auto; }
+.words th { text-align: start; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 6px 8px; border-bottom: 2px solid var(--line); }
+.words td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.words td.cursive { font-size: 1.8rem; }
+.words td.print { font-size: 1.3rem; }
+footer { color: var(--muted); font-size: .85rem; text-align: center; }
+
+@media (max-width: 520px) {
+  nav { grid-template-columns: repeat(2, 1fr); }
+  .tile.he-tile { font-size: 1.8rem; }
+  .tile.en-tile { font-size: .95rem; }
+  .opts { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .flash-inner, .tile { transition: none; } .tile.wrong { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Shoresh Cards <span class="he" lang="he">שֹׁרֶשׁ</span></h1>
+    <div class="stars" aria-live="polite"><b>★</b><span id="starCount">0</span> stars</div>
+  </header>
+
+  <div class="lesson">
+    <label for="lessonSel">Homework:</label>
+    <select id="lessonSel"></select>
+    <span class="he" id="lessonHe" lang="he"></span>
+  </div>
+
+  <nav aria-label="Practice mode">
+    <button data-mode="cards">Cards<small>flip &amp; learn</small></button>
+    <button data-mode="match">Match<small>pair them up</small></button>
+    <button data-mode="quiz">Quiz<small>root &amp; meaning</small></button>
+    <button data-mode="letters">Letters<small>cursive chart</small></button>
+  </nav>
+
+  <section class="panel" id="panel" aria-live="polite"></section>
+
+  <footer>Tap a card to flip it. Your stars stay on this device.</footer>
+</div>
+
+<script src="lessons.js"></script>
+<script>
+(function () {
+  const LESSONS = window.LESSONS || [];
+  const EXTRA = window.EXTRA_ROOTS || [];
+  const $ = (s, el = document) => el.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const rootStr = r => [...r].join("-");
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("shoresh:" + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem("shoresh:" + k, JSON.stringify(v)); } catch (e) {} }
+  };
+
+  let stars = store.get("stars", 0);
+  const addStars = n => { stars += n; store.set("stars", stars); $("#starCount").textContent = stars; };
+  $("#starCount").textContent = stars;
+
+  // Lesson picker: each lesson plus "All words"
+  const sel = $("#lessonSel");
+  const options = LESSONS.map((l, i) => ({ v: String(i), t: l.title + " (" + l.date + ")" }));
+  if (LESSONS.length > 1) options.push({ v: "all", t: "All homework words" });
+  sel.innerHTML = options.map(o => `<option value="${o.v}">${esc(o.t)}</option>`).join("");
+  sel.value = store.get("lesson", "0");
+  if (!options.some(o => o.v === sel.value)) sel.value = "0";
+  const words = () => sel.value === "all" ? LESSONS.flatMap(l => l.words) : (LESSONS[+sel.value] || { words: [] }).words;
+  const showLessonHe = () => { const l = LESSONS[+sel.value]; $("#lessonHe").textContent = sel.value !== "all" && l ? l.titleHe || "" : ""; };
+  sel.addEventListener("change", () => { store.set("lesson", sel.value); showLessonHe(); render(); });
+  showLessonHe();
+
+  // Modes, routed on the hash
+  const MODES = ["cards", "match", "quiz", "letters"];
+  let mode = MODES.includes(location.hash.slice(1)) ? location.hash.slice(1) : "cards";
+  document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.mode; }));
+  window.addEventListener("hashchange", () => { const m = location.hash.slice(1); if (MODES.includes(m)) { mode = m; render(); } });
+
+  const panel = $("#panel");
+  function render() {
+    document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === mode));
+    ({ cards, match, quiz, letters })[mode]();
+  }
+
+  // ---------- Flashcards ----------
+  let deck = [], at = 0, front = store.get("front", "cursive");
+  function cards() {
+    deck = words().slice(); at = 0; drawCard();
+  }
+  function drawCard() {
+    const w = deck[at];
+    if (!w) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
+    const frontHtml = front === "en"
+      ? `<div class="big en">${esc(w.en)}</div>`
+      : `<div class="big he ${front}" lang="he">${esc(w.he)}</div>`;
+    panel.innerHTML = `
+      <div class="row">
+        <div class="seg" role="group" aria-label="Front of card">
+          ${[["cursive", "Cursive"], ["print", "Print"], ["en", "English"]].map(([k, t]) => `<button data-front="${k}" aria-pressed="${front === k}">${t}</button>`).join("")}
+        </div>
+        <span class="count">${at + 1} / ${deck.length}</span>
+      </div>
+      <div class="flash" id="flash" role="button" tabindex="0" aria-label="Flip card">
+        <div class="flash-inner">
+          <div class="face front">${frontHtml}<div class="tap">Tap to flip</div></div>
+          <div class="face back">
+            <div class="pair"><span class="he cursive" lang="he">${esc(w.he)}</span><span class="he print" lang="he">${esc(w.he)}</span></div>
+            <div class="en">${esc(w.en)}</div>
+            <div class="say">say: ${esc(w.say)}</div>
+            <div class="rootchip"><span class="lbl">Root</span><span class="he" lang="he">${esc(rootStr(w.root))}</span></div>
+            <div class="hint">${heWrap(w.hint)}</div>
+            ${w.source ? `<div class="src">${esc(w.source)}</div>` : ""}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="prev">← Back</button>
+        <button class="btn" id="shuf">Shuffle</button>
+        <button class="btn primary" id="next">Next →</button>
+      </div>`;
+    const flash = $("#flash");
+    const flip = () => flash.classList.toggle("flipped");
+    flash.addEventListener("click", flip);
+    flash.addEventListener("keydown", e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } });
+    panel.querySelectorAll("[data-front]").forEach(b => b.addEventListener("click", () => { front = b.dataset.front; store.set("front", front); drawCard(); }));
+    $("#prev").onclick = () => { at = (at - 1 + deck.length) % deck.length; drawCard(); };
+    $("#next").onclick = () => { at = (at + 1) % deck.length; drawCard(); };
+    $("#shuf").onclick = () => { deck = shuffle(deck); at = 0; drawCard(); };
+  }
+  // Wrap runs of Hebrew inside English text so they render right-to-left in the print font
+  const heWrap = s => esc(s).replace(/([֐-׿][֐-׿\s\-]*[֐-׿]|[֐-׿])/g, '<span class="he" lang="he">$1</span>');
+
+  // ---------- Match ----------
+  function match() {
+    const ws = shuffle(words()).slice(0, 6);
+    if (!ws.length) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
+    const heCol = shuffle(ws.map((w, i) => ({ i, w })));
+    const enCol = shuffle(ws.map((w, i) => ({ i, w })));
+    let pick = null, left = ws.length, misses = 0;
+    panel.innerHTML = `
+      <div class="row"><strong>Match each Hebrew word to its meaning.</strong><span class="count" id="mleft">${left} left</span></div>
+      <div class="match">
+        <div class="col">${heCol.map(x => `<button class="tile he-tile he cursive" lang="he" data-side="he" data-i="${x.i}">${esc(x.w.he)}</button>`).join("")}</div>
+        <div class="col">${enCol.map(x => `<button class="tile en-tile" data-side="en" data-i="${x.i}">${esc(x.w.en)}</button>`).join("")}</div>
+      </div>
+      <div class="note" id="mnote"></div>`;
+    panel.querySelectorAll(".tile").forEach(t => t.addEventListener("click", () => {
+      if (t.classList.contains("done")) return;
+      if (!pick || pick.dataset.side === t.dataset.side) {
+        if (pick) pick.classList.remove("sel");
+        pick = t; t.classList.add("sel"); return;
+      }
+      const a = pick, b = t; pick = null; a.classList.remove("sel");
+      if (a.dataset.i === b.dataset.i) {
+        [a, b].forEach(x => { x.classList.add("done"); x.disabled = true; });
+        left--; $("#mleft").textContent = left + " left";
+        const w = ws[+a.dataset.i];
+        $("#mnote").className = "note ok"; $("#mnote").innerHTML = `Yes! Root ${heWrap(rootStr(w.root))}`;
+        if (!left) setTimeout(() => finish(Math.max(1, 3 - Math.floor(misses / 2)), misses ? `${misses} miss${misses > 1 ? "es" : ""}` : "No misses!", match), 600);
+      } else {
+        misses++;
+        [a, b].forEach(x => { x.classList.remove("wrong"); void x.offsetWidth; x.classList.add("wrong"); });
+        $("#mnote").className = "note no"; $("#mnote").textContent = "Not a pair. Try again.";
+      }
+    }));
+  }
+
+  // ---------- Quiz ----------
+  function quiz() {
+    const ws = words();
+    if (!ws.length) { panel.innerHTML = "<p>No words in this homework yet.</p>"; return; }
+    const allRoots = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.root)).concat(EXTRA))];
+    const allEn = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.en)))];
+    const allHe = [...new Set(LESSONS.flatMap(l => l.words.map(w => w.he)))];
+    const kinds = ["root", "meaning", "read"];
+    const qs = shuffle(ws).flatMap((w, i) => [{ w, kind: kinds[i % 3] }, { w, kind: kinds[(i + 1) % 3] }]);
+    const list = shuffle(qs).slice(0, Math.min(10, qs.length));
+    let n = 0, right = 0;
+    const pickOpts = (correct, pool) => shuffle([correct, ...shuffle(pool.filter(x => x !== correct)).slice(0, 3)]);
+    function ask() {
+      if (n >= list.length) {
+        const pct = right / list.length;
+        return finish(pct === 1 ? 3 : pct >= .7 ? 2 : 1, `${right} of ${list.length} right`, quiz);
+      }
+      const { w, kind } = list[n];
+      let askTxt, wordHtml, opts, correct, optClass;
+      if (kind === "root") {
+        askTxt = "What is the root?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
+        correct = w.root; opts = pickOpts(correct, allRoots); optClass = "he";
+      } else if (kind === "meaning") {
+        askTxt = "What does it mean?"; wordHtml = `<div class="word he cursive" lang="he">${esc(w.he)}</div>`;
+        correct = w.en; opts = pickOpts(correct, allEn.concat(["he said", "they came", "I will sit", "he heard"])); optClass = "";
+      } else {
+        askTxt = "Which word says this?"; wordHtml = `<div class="word en">${esc(w.en)}</div>`;
+        correct = w.he; opts = pickOpts(correct, allHe.concat(["וַיֹּאמֶר", "אֵשֵׁב", "וַיָּבֹאוּ", "שָׁמַע"])); optClass = "he cursive";
+      }
+      const label = o => kind === "root" ? rootStr(o) : o;
+      panel.innerHTML = `
+        <div class="bar" aria-hidden="true"><i style="width:${(n / list.length) * 100}%"></i></div>
+        <div class="row"><span class="count">Question ${n + 1} of ${list.length}</span><span class="count">${right} right</span></div>
+        <div class="q"><div class="ask">${askTxt}</div>${wordHtml}</div>
+        <div class="opts">${opts.map(o => `<button class="opt ${optClass}" ${optClass ? 'lang="he"' : ""} data-v="${esc(o)}">${esc(label(o))}</button>`).join("")}</div>
+        <div class="note" id="qnote"></div>
+        <div class="row" style="justify-content:flex-end"><button class="btn primary" id="qnext" hidden>Next →</button></div>`;
+      panel.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+        if (panel.querySelector(".opt.right")) return;
+        const ok = b.dataset.v === correct;
+        panel.querySelectorAll(".opt").forEach(x => { if (x.dataset.v === correct) x.classList.add("right"); });
+        const note = $("#qnote");
+        if (ok) { right++; note.className = "note ok"; note.textContent = "Correct!"; }
+        else { b.classList.add("miss"); note.className = "note no"; note.innerHTML = heWrap(w.hint); }
+        const nx = $("#qnext"); nx.hidden = false; nx.focus();
+        nx.onclick = () => { n++; ask(); };
+      }));
+    }
+    ask();
+  }
+
+  function finish(earned, line, again) {
+    addStars(earned);
+    panel.innerHTML = `
+      <div class="done-box">
+        <div class="big-stars" aria-label="${earned} stars">${"★".repeat(earned)}${"☆".repeat(3 - earned)}</div>
+        <h2>${earned === 3 ? "Amazing!" : earned === 2 ? "Great job!" : "Good try!"}</h2>
+        <div>${esc(line)} · +${earned} star${earned > 1 ? "s" : ""}</div>
+        <button class="btn primary" id="again">Play again</button>
+      </div>`;
+    $("#again").onclick = again;
+  }
+
+  // ---------- Letters ----------
+  const ALEPH_BET = [["א","alef"],["ב","bet"],["ג","gimmel"],["ד","dalet"],["ה","hey"],["ו","vav"],["ז","zayin"],["ח","chet"],["ט","tet"],["י","yud"],["כ","kaf"],["ך","final kaf"],["ל","lamed"],["מ","mem"],["ם","final mem"],["נ","nun"],["ן","final nun"],["ס","samech"],["ע","ayin"],["פ","pey"],["ף","final pey"],["צ","tzadi"],["ץ","final tzadi"],["ק","kuf"],["ר","reish"],["ש","shin"],["ת","tav"]];
+  function letters() {
+    const ws = words();
+    panel.innerHTML = `
+      <p class="tip">Big blue letter = cursive (how it is written). Small black letter = print (how it looks in a sefer).</p>
+      <div class="letters">${ALEPH_BET.map(([l, n]) => `<div class="lt"><span class="c" lang="he">${l}</span><span class="p" lang="he">${l}</span><span class="n">${n}</span></div>`).join("")}</div>
+      ${ws.length ? `<div class="tablewrap"><table class="words">
+        <thead><tr><th>Cursive</th><th>Print</th><th>Root</th><th>Meaning</th></tr></thead>
+        <tbody>${ws.map(w => `<tr><td class="he cursive" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(w.he)}</td><td class="he print" lang="he">${esc(rootStr(w.root))}</td><td>${esc(w.en)}</td></tr>`).join("")}</tbody>
+      </table></div>` : ""}`;
+  }
+
+  render();
+})();
+</script>
